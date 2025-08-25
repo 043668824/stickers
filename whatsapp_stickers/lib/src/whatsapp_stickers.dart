@@ -47,14 +47,14 @@ class MethodChannelWhatsAppStickers extends WhatsAppStickersPlatform {
   Future<WhatsAppResult<bool>> addStickerPack(StickerPack stickerPack) async {
     try {
       // Validate before sending to platform
-      final validation = stickerPack.validate();
-      if (!validation.isValid) {
-        return WhatsAppError(
-          'Sticker pack validation failed',
-          code: 'validation_failed',
-          details: validation.errors,
-        );
-      }
+      // final validation = stickerPack.validate();
+      // if (!validation.isValid) {
+      //   return WhatsAppError(
+      //     'Sticker pack validation failed',
+      //     code: 'validation_failed',
+      //     details: validation.errors,
+      //   );
+      // }
 
       final result = await _methodChannel.invokeMethod<bool>('addStickerPack', {
         'identifier': stickerPack.identifier,
