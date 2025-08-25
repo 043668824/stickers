@@ -1,0 +1,27 @@
+name: whatsapp_stickers
+description: A modern Flutter plugin for integrating WhatsApp stickers with full Dart 3 compatibility.
+version: 1.0.0
+homepage: https://github.com/043668824/stickers
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.whatsapp.stickers
+        pluginClass: WhatsAppStickersPlugin
+      ios:
+        pluginClass: WhatsAppStickersPlugin
