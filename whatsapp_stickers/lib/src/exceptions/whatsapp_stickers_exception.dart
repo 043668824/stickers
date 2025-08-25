@@ -60,7 +60,7 @@ final class UnsupportedImageFormatException extends WhatsAppStickersException {
 
 /// Exception thrown when an image is too large.
 final class ImageTooLargeException extends WhatsAppStickersException {
-  const ImageTooLargeException(int actualSize, int maxSize) 
+  ImageTooLargeException(int actualSize, int maxSize) 
     : super('Image size (${(actualSize / 1024).toStringAsFixed(1)} KB) '
             'exceeds maximum allowed size (${(maxSize / 1024).toStringAsFixed(0)} KB)', 
             code: 'image_too_large');

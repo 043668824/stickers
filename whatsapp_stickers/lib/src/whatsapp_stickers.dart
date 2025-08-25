@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'models/models.dart';
-import 'exceptions/exceptions.dart';
 
 /// The interface that implementations of whatsapp_stickers must implement.
 abstract class WhatsAppStickersPlatform extends PlatformInterface {
@@ -42,7 +40,8 @@ abstract class WhatsAppStickersPlatform extends PlatformInterface {
 /// Method channel implementation of [WhatsAppStickersPlatform].
 class MethodChannelWhatsAppStickers extends WhatsAppStickersPlatform {
   /// The method channel used to interact with the native platform.
-  static const MethodChannel _methodChannel = MethodChannel('whatsapp_stickers');
+  static const MethodChannel _methodChannel =
+      MethodChannel('whatsapp_stickers');
 
   @override
   Future<WhatsAppResult<bool>> addStickerPack(StickerPack stickerPack) async {
@@ -62,12 +61,14 @@ class MethodChannelWhatsAppStickers extends WhatsAppStickersPlatform {
         'name': stickerPack.name,
         'publisher': stickerPack.publisher,
         'trayImageData': stickerPack.trayImageData,
-        'stickers': stickerPack.stickers.map((sticker) => {
-          'imageFileName': sticker.imageFileName,
-          'imageData': sticker.imageData,
-          'emojis': sticker.emojis,
-          'accessibilityText': sticker.accessibilityText,
-        }).toList(),
+        'stickers': stickerPack.stickers
+            .map((sticker) => {
+                  'imageFileName': sticker.imageFileName,
+                  'imageData': sticker.imageData,
+                  'emojis': sticker.emojis,
+                  'accessibilityText': sticker.accessibilityText,
+                })
+            .toList(),
         'publisherEmail': stickerPack.publisherEmail,
         'publisherWebsite': stickerPack.publisherWebsite,
         'privacyPolicyWebsite': stickerPack.privacyPolicyWebsite,
@@ -95,7 +96,8 @@ class MethodChannelWhatsAppStickers extends WhatsAppStickersPlatform {
   @override
   Future<WhatsAppResult<bool>> isStickerPackInstalled(String identifier) async {
     try {
-      final result = await _methodChannel.invokeMethod<bool>('isStickerPackInstalled', {
+      final result =
+          await _methodChannel.invokeMethod<bool>('isStickerPackInstalled', {
         'identifier': identifier,
       });
 
@@ -118,7 +120,8 @@ class MethodChannelWhatsAppStickers extends WhatsAppStickersPlatform {
   @override
   Future<WhatsAppResult<bool>> isWhatsAppInstalled() async {
     try {
-      final result = await _methodChannel.invokeMethod<bool>('isWhatsAppInstalled');
+      final result =
+          await _methodChannel.invokeMethod<bool>('isWhatsAppInstalled');
       return WhatsAppSuccess(result ?? false);
     } on PlatformException catch (e) {
       return WhatsAppError(
@@ -136,7 +139,8 @@ class MethodChannelWhatsAppStickers extends WhatsAppStickersPlatform {
   }
 
   @override
-  Future<WhatsAppResult<bool>> validateStickerPack(StickerPack stickerPack) async {
+  Future<WhatsAppResult<bool>> validateStickerPack(
+      StickerPack stickerPack) async {
     try {
       final validation = stickerPack.validate();
       if (!validation.isValid) {
@@ -148,17 +152,20 @@ class MethodChannelWhatsAppStickers extends WhatsAppStickersPlatform {
       }
 
       // Additional platform-specific validation can be done here
-      final result = await _methodChannel.invokeMethod<bool>('validateStickerPack', {
+      final result =
+          await _methodChannel.invokeMethod<bool>('validateStickerPack', {
         'identifier': stickerPack.identifier,
         'name': stickerPack.name,
         'publisher': stickerPack.publisher,
         'trayImageData': stickerPack.trayImageData,
-        'stickers': stickerPack.stickers.map((sticker) => {
-          'imageFileName': sticker.imageFileName,
-          'imageData': sticker.imageData,
-          'emojis': sticker.emojis,
-          'accessibilityText': sticker.accessibilityText,
-        }).toList(),
+        'stickers': stickerPack.stickers
+            .map((sticker) => {
+                  'imageFileName': sticker.imageFileName,
+                  'imageData': sticker.imageData,
+                  'emojis': sticker.emojis,
+                  'accessibilityText': sticker.accessibilityText,
+                })
+            .toList(),
       });
 
       return WhatsAppSuccess(result ?? true);
@@ -179,19 +186,20 @@ class MethodChannelWhatsAppStickers extends WhatsAppStickersPlatform {
 }
 
 /// Main class for the WhatsApp Stickers plugin.
-/// 
+///
 /// Provides a modern Dart 3 API for integrating with WhatsApp stickers.
 class WhatsAppStickers {
   /// Private constructor to prevent instantiation.
   WhatsAppStickers._();
 
-  static WhatsAppStickersPlatform get _platform => WhatsAppStickersPlatform.instance;
+  static WhatsAppStickersPlatform get _platform =>
+      WhatsAppStickersPlatform.instance;
 
   /// Adds a sticker pack to WhatsApp.
-  /// 
+  ///
   /// Returns a [WhatsAppResult] indicating success or failure.
   /// The sticker pack will be validated before being sent to WhatsApp.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// final result = await WhatsAppStickers.addStickerPack(stickerPack);
@@ -207,9 +215,9 @@ class WhatsAppStickers {
   }
 
   /// Checks if a sticker pack is already installed in WhatsApp.
-  /// 
+  ///
   /// Returns a [WhatsAppResult] with true if the pack is installed, false otherwise.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// final result = await WhatsAppStickers.isStickerPackInstalled('my_pack_id');
@@ -217,14 +225,15 @@ class WhatsAppStickers {
   ///   print('Sticker pack is already installed');
   /// }
   /// ```
-  static Future<WhatsAppResult<bool>> isStickerPackInstalled(String identifier) {
+  static Future<WhatsAppResult<bool>> isStickerPackInstalled(
+      String identifier) {
     return _platform.isStickerPackInstalled(identifier);
   }
 
   /// Checks if WhatsApp is installed on the device.
-  /// 
+  ///
   /// Returns a [WhatsAppResult] with true if WhatsApp is available, false otherwise.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// final result = await WhatsAppStickers.isWhatsAppInstalled();
@@ -237,12 +246,12 @@ class WhatsAppStickers {
   }
 
   /// Validates a sticker pack without adding it to WhatsApp.
-  /// 
+  ///
   /// This is useful for checking if a sticker pack meets WhatsApp's requirements
   /// before attempting to add it.
-  /// 
+  ///
   /// Returns a [WhatsAppResult] with true if valid, false with error details if invalid.
-  /// 
+  ///
   /// Example:
   /// ```dart
   /// final result = await WhatsAppStickers.validateStickerPack(stickerPack);
@@ -250,7 +259,8 @@ class WhatsAppStickers {
   ///   print('Validation failed: ${result.errorMessage}');
   /// }
   /// ```
-  static Future<WhatsAppResult<bool>> validateStickerPack(StickerPack stickerPack) {
+  static Future<WhatsAppResult<bool>> validateStickerPack(
+      StickerPack stickerPack) {
     return _platform.validateStickerPack(stickerPack);
   }
 }
